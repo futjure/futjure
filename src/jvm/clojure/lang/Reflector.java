@@ -93,11 +93,26 @@ private static Method toAccessibleSuperMethod(Method m, Object target) {
 	return null;
 }
 
+private static int paramsTiebreaker(Class[] ps1, Class[] ps2) {
+	final int n = ps1.length;
+	for (int i = 0; i < n; i++) {
+		int ret = ps1[i].getName().compareTo(ps2[i].getName());
+		if (ret != 0) return ret;
+	}
+	return 0;
+}
+
+private static Comparator<Method> methodComparator() {
+    return Comparator.comparing((Method m) -> m.getReturnType().getName())
+	              .thenComparing(Method::getParameterTypes, Reflector::paramsTiebreaker);
+}
+
 public static Object invokeInstanceMethod(Object target, String methodName, Object[] args) {
 	Class c = target.getClass();
 	List methods = getMethods(c, args.length, methodName, false).stream()
 					.map(method -> toAccessibleSuperMethod(method, target))
 					.filter(method -> (method != null))
+					.sorted(methodComparator())
 					.collect(Collectors.toList());
 	return invokeMatchingMethod(methodName, methods, target, args);
 }
