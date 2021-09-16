@@ -101,6 +101,10 @@ public static Object cloneThreadBindingFrame(){
 	return dvals.get().clone();
 }
 
+public static void resetThreadBindingFrame(){
+	dvals.remove();
+}
+
 public static void resetThreadBindingFrame(Object frame){
 	dvals.set((Frame) frame);
 }
