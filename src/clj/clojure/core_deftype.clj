@@ -571,7 +571,14 @@
   "Returns true if x satisfies the protocol"
   {:added "1.2"}
   [protocol x]
-  (boolean (find-protocol-impl protocol x)))
+  (boolean (or (find-protocol-impl protocol x)
+               (when (:extend-via-metadata protocol)
+                 (when-some [xm (meta x)]
+                   (when-some [method-map-keys (-> protocol :method-map keys seq)]
+                     (let [nstr (-> protocol :var symbol namespace)]
+                       (some (fn [mmap-key]
+                               (get xm (symbol nstr (name mmap-key))))
+                             method-map-keys))))))))
 
 (defn -cache-protocol-fn [^clojure.lang.AFunction pf x ^Class c ^clojure.lang.IFn interf]
   (let [cache  (.__methodImplCache pf)
