@@ -82,9 +82,9 @@
 
   <distributionManagement>
     <snapshotRepository>
-      <!-- This id is linked to the key setup on the CI server -->
-      <id>sonatype-nexus-staging</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>clojars</id>
+      <name>Clojars repository</name>
+      <url>https://clojars.org/repo</url>
     </snapshotRepository>
   </distributionManagement>
 
