@@ -27,9 +27,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:clojure/clojure.git</connection>
-    <developerConnection>scm:git:git@github.com:clojure/clojure.git</developerConnection>
-    <url>git@github.com:clojure/clojure.git</url>
+    <connection>scm:git:git@github.com:futjure/futjure.git</connection>
+    <developerConnection>scm:git:git@github.com:futjure/futjure.git</developerConnection>
+    <url>git@github.com:futjure/futjure.git</url>
     <tag>HEAD</tag>
   </scm>
 
