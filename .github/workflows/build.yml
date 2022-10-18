@@ -24,3 +24,8 @@ jobs:
         run: |
           mkdir -p ~/.m2
           echo "<settings><servers><server><id>clojars</id><username>${{ secrets.CLOJARS_USER }}-clojars</username><password>${{ secrets.CLOJARS_PASSWORD }}</password></server></servers></settings>" > ~/.m2/settings.xml
+      - name: Release
+        run: echo "TODO do release"
+      - name: Delete settings.xml
+        if: ${{ always() }}
+        run: rm -f ~/.m2/settings.xml
