@@ -59,14 +59,19 @@ lein with-profiles +futjure ...
 
 Futjure includes the following patches.
 
-### CLJ-2619: clear future thread bindings after execution
+### [CLJ-2619](https://clojure.atlassian.net/browse/CLJ-2619): clear future thread bindings after execution
 
-This fixes a memory leak in `clojure.core/future` where the thread pools used by futures
+Fixes a memory leak in `clojure.core/future` where the thread pools used by futures
 retain a hard reference to any thread bindings conveyed to a futures thread.
 
-- [CLJ-2619](https://clojure.atlassian.net/browse/CLJ-2619)
 - [Patch](https://github.com/futjure/futjure/compare/futjure-master...clj-2619-futures-memory-leak-2)
 - [Blog](https://blog.ambrosebs.com/2022/09/11/futures-memory-leak.html)
+
+### [CLJ-2426](https://clojure.atlassian.net/browse/CLJ-2426): support metadata extension in satisfies?
+
+Extends `clojure.core/satisfies?` to support values that implement protocols via the `:extend-via-metadata` feature.
+
+- [Patch](https://github.com/futjure/futjure/compare/futjure-master...clj-2426-satisfies-via-metadata)
 
 ## License
 
