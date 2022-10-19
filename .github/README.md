@@ -11,13 +11,13 @@ have been or could be proposed in [Jira](https://clojure.atlassian.net/jira/soft
 Paste the following into a terminal to start a Futjure REPL.
 
 ```bash
-clj -Sforce -Srepro -Sdeps '{:classpath-overrides {org.clojure/clojure nil} :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}} :paths []}'
+clj -Sdeps '{:aliases {:futjure {:classpath-overrides {org.clojure/clojure nil} :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}} :paths []}}}' -A:futjure
 ```
 
 eg.,
 
 ```bash
-$ clj -Sforce -Srepro -Sdeps '{:classpath-overrides {org.clojure/clojure nil} :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}} :paths []}'
+$ clj -Sdeps '{:aliases {:futjure {:classpath-overrides {org.clojure/clojure nil} :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}} :paths []}}}' -A:futjure
 Downloading: io/github/futjure/futjure/1.12.0-master-SNAPSHOT/maven-metadata.xml from clojars
 Downloading: io/github/futjure/futjure/1.12.0-master-SNAPSHOT/futjure-1.12.0-master-20221019.033342-3.pom from clojars
 Downloading: io/github/futjure/futjure/1.12.0-master-SNAPSHOT/futjure-1.12.0-master-20221019.033342-3.jar from clojars
