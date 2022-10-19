@@ -3,6 +3,19 @@
   (:import [clojure.reflect AsmReflector JavaReflector]
            [reflector IBar$Factory]))
 
+(defn te* [top-levels body]
+  (let [g (gensym "clojure.test-clojure.reflect.gensym")]
+    ((binding [*ns* *ns*]
+       (eval `(do (ns ~g
+                    (:require ~'[clojure.test :refer :all]))
+                  ~@top-levels
+                  (fn [] (do ~@body))))))
+    (remove-ns g)
+    nil))
+
+(defmacro te [top-levels & body]
+  `(te* '~top-levels '~body))
+
 (defn nodiff
   [x y]
   (let [[x-only y-only common] (diff x y)]
@@ -52,3 +65,28 @@
 
   ;; CLJ-2414 - find default method on interface of inaccessible class
   (checkCLJ2414 (java.nio.file.Paths/get "src" (into-array String []))))
+
+;; CLJ-2413
+(deftest determinist-method-reflection-test
+  (dotimes [_ 5]
+    (te [(definterface A
+           ;; zero-arity cannot be overriden
+           (one [^Runnable a])
+           (one [^java.util.concurrent.Callable a])
+           (two [^Runnable a ^java.util.concurrent.Callable b])
+           (two [^java.util.concurrent.Callable a ^Runnable b])
+           (two [^java.util.concurrent.Callable a ^java.util.concurrent.Callable b])
+           (two [^Runnable a ^Runnable b]))]
+        (let [target (reify A
+                       (one [_ ^Runnable a] [:Runnable])
+                       (one [_ ^java.util.concurrent.Callable a] [:Callable])
+                       (two [_ ^Runnable a ^java.util.concurrent.Callable b] [:Runnable :Callable])
+                       (two [_ ^java.util.concurrent.Callable a ^Runnable b] [:Callable :Runnable])
+                       (two [_ ^java.util.concurrent.Callable a ^java.util.concurrent.Callable b] [:Callable :Callable])
+                       (two [_ ^Runnable a ^Runnable b] [:Runnable :Runnable]))
+              ^Object obj (fn [])]
+          (is (instance? Runnable obj))
+          (is (instance? java.util.concurrent.Callable obj))
+          (dotimes [_ 5]
+            (is (= [:Runnable] (.one target obj)))
+            (is (= [:Runnable :Runnable] (.two target obj obj))))))))
