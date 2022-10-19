@@ -1,10 +1,50 @@
 # Futjure
 
-A possible future of Clojure envisioned by [@frenchy64](https://github.com/frenchy64).
+An unoffical Clojure distribution that tracks offical development,
+but also applies patches with various enhancements and fixes that
+have been or could be proposed in [Jira](https://clojure.atlassian.net/jira/software/c/projects/CLJ/issues).
+
+[![Clojars Project](https://img.shields.io/clojars/v/io.github.futjure/futjure.svg?include_prereleases)](https://clojars.org/io.github.futjure/futjure)
+
+## Quickstart
+
+```clojure
+$ clj -Sdeps '{:classpath-overrides {org.clojure/clojure nil} :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}'
+Clojure 1.12.0-master-SNAPSHOT
+user=> 
+```
 
 ## How to use
 
-Clojure CLI
+Futjure is intended to be used only in experiments and to test code bases against potential future
+patches to Clojure.
+
+Check [here](https://clojars.org/io.github.futjure/futjure) for the latest version.
+
+Clojure CLI:
+```clojure
+;deps.edn
+{:aliases {:futjure {:classpath-overrides {org.clojure/clojure nil}
+                     :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}}}
+```
+
+```bash
+# activate like this:
+clojure -A:futjure ...
+```
+
+Leiningen:
+```clojure
+;project.clj
+(defproject my-project "1.0.0-SNAPSHOT"
+  :profiles {:futjure {:exclusions [org.clojure/clojure]
+                       :dependencies [[io.github.futjure/futjure "1.12.0-master-SNAPSHOT"]]}})
+```
+
+```bash
+# activate like this:
+lein with-profiles +futjure ...
+```
 
 ## License
 
