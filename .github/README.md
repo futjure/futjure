@@ -8,7 +8,15 @@ have been or could be proposed in [Jira](https://clojure.atlassian.net/jira/soft
 
 ## Quickstart
 
-```clojure
+Paste the following into a terminal to start a Futjure REPL.
+
+```bash
+clj -Sdeps '{:classpath-overrides {org.clojure/clojure nil} :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}'
+```
+
+eg.,
+
+```bash
 $ clj -Sdeps '{:classpath-overrides {org.clojure/clojure nil} :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}'
 Clojure 1.12.0-master-SNAPSHOT
 user=> 
