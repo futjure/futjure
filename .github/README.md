@@ -81,6 +81,12 @@ randomly, since Clojure functions implement both.
 
 - [Patch](https://github.com/futjure/futjure/compare/futjure-master...clj-2413-deterministic-reflection)
 
+### [CLJ-2322](https://clojure.atlassian.net/browse/CLJ-2322): add zero-arity to juxt
+
+Support zero-arguments in `clojure.core/juxt`.
+
+- [Patch](https://github.com/futjure/futjure/compare/futjure-master...CLJ-2322-juxt-zero-arity)
+
 ## License
 
 Same as Clojure---see [readme.txt](readme.txt).
