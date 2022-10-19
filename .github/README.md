@@ -66,6 +66,7 @@ retain a hard reference to any thread bindings conveyed to a futures thread.
 
 - [Patch](https://github.com/futjure/futjure/compare/futjure-master...clj-2619-futures-memory-leak-2)
 - [Blog](https://blog.ambrosebs.com/2022/09/11/futures-memory-leak.html)
+- [Standalone library](https://frenchy64.github.io/fully-satisfies/latest/io.github.frenchy64.fully-satisfies.clearing-future.html)
 
 ### [CLJ-2426](https://clojure.atlassian.net/browse/CLJ-2426): support metadata extension in satisfies?
 

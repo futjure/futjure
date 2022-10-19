@@ -7,7 +7,7 @@
   <packaging>jar</packaging>
   <version>1.12.0-master-SNAPSHOT</version>
 
-  <url>http://clojure.org/</url>
+  <url>https://github.com/futjure/futjure</url>
   <description>Clojure core environment and runtime library.</description>
 
   <developers>
