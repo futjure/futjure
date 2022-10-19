@@ -73,6 +73,7 @@ retain a hard reference to any thread bindings conveyed to a futures thread.
 Extends `clojure.core/satisfies?` to support values that implement protocols via the `:extend-via-metadata` feature.
 
 - [Patch](https://github.com/futjure/futjure/compare/futjure-master...clj-2426-satisfies-via-metadata)
+- [Standalone library](https://frenchy64.github.io/fully-satisfies/latest/io.github.frenchy64.fully-satisfies.partially-satisfies.html)
 
 ### [CLJ-2413](https://clojure.atlassian.net/browse/CLJ-2413): make Method enumeration deterministic
 
