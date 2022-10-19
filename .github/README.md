@@ -73,6 +73,14 @@ Extends `clojure.core/satisfies?` to support values that implement protocols via
 
 - [Patch](https://github.com/futjure/futjure/compare/futjure-master...clj-2426-satisfies-via-metadata)
 
+### [CLJ-2413](https://clojure.atlassian.net/browse/CLJ-2413): make Method enumeration deterministic
+
+Enhances Clojure's reflector to always choose methods deterministically when there's ambiguity.
+Before this patch, it was common for ties between java.lang.Runnable and java.util.concurrent.Callable to be resolved
+randomly, since Clojure functions implement both.
+
+- [Patch](https://github.com/futjure/futjure/compare/futjure-master...clj-2413-deterministic-reflection)
+
 ## License
 
 Same as Clojure---see [readme.txt](readme.txt).
