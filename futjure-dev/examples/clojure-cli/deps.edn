@@ -1,2 +1,2 @@
 {:classpath-overrides {org.clojure/clojure nil}
- :deps {org.clojars.frenchy64/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}
+ :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}
