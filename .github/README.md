@@ -17,7 +17,8 @@ user=>
 ## How to use
 
 Futjure is intended to be used only in experiments and to test code bases against potential future
-patches to Clojure.
+patches to Clojure. Only snapshot jars are released---if you are already testing against
+Clojure's latest `X.Y.Z-master-SNAPSHOT` builds, you can use the same version for Futjure.
 
 Check [here](https://clojars.org/io.github.futjure/futjure) for the latest version.
 
@@ -45,6 +46,19 @@ Leiningen:
 # activate like this:
 lein with-profiles +futjure ...
 ```
+
+## Included patches
+
+Futjure includes the following patches.
+
+### CLJ-2619: clear future thread bindings after execution
+
+This fixes a memory leak in `clojure.core/future` where the thread pools used by futures
+retain a hard reference to any thread bindings conveyed to a futures thread.
+
+- [CLJ-2619](https://clojure.atlassian.net/browse/CLJ-2619)
+- [Patch](https://github.com/futjure/futjure/compare/futjure-master...clj-2619-futures-memory-leak-2)
+- [Blog](https://blog.ambrosebs.com/2022/09/11/futures-memory-leak.html)
 
 ## License
 
