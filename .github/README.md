@@ -11,15 +11,20 @@ have been or could be proposed in [Jira](https://clojure.atlassian.net/jira/soft
 Paste the following into a terminal to start a Futjure REPL.
 
 ```bash
-clj -Sdeps '{:classpath-overrides {org.clojure/clojure nil} :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}'
+clj -Sforce -Srepro -Sdeps '{:classpath-overrides {org.clojure/clojure nil} :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}'
 ```
 
 eg.,
 
 ```bash
-$ clj -Sdeps '{:classpath-overrides {org.clojure/clojure nil} :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}'
+$ clj -Sforce -Srepro -Sdeps '{:classpath-overrides {org.clojure/clojure nil} :deps {io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}'
+Downloading: io/github/futjure/futjure/1.12.0-master-SNAPSHOT/maven-metadata.xml from clojars
+Downloading: io/github/futjure/futjure/1.12.0-master-SNAPSHOT/futjure-1.12.0-master-20221019.033342-3.pom from clojars
+Downloading: io/github/futjure/futjure/1.12.0-master-SNAPSHOT/futjure-1.12.0-master-20221019.033342-3.jar from clojars
 Clojure 1.12.0-master-SNAPSHOT
-user=> 
+user=> ((juxt))
+[]
+user=>
 ```
 
 ## How to use
