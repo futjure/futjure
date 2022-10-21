@@ -330,5 +330,16 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <!-- "mvn -Pfutjure-rolling-release" deploys 1.0.0-futjure-SNAPSHOT -->
+      <id>futjure-rolling-release</id>
+      <!--<version>1.0.0-futjure-SNAPSHOT</version>-->
+      <distributionManagement>
+        <snapshotRepository>
+          <id>github</id>
+          <url>https://maven.pkg.github.com/futjure/futjure</url>
+        </snapshotRepository>
+      </distributionManagement>
+    </profile>
   </profiles>
 </project>

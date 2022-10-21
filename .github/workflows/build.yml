@@ -65,8 +65,10 @@ jobs:
       - name: Configure settings.xml
         run: |
           mkdir -p ~/.m2
-          echo "<settings><servers><server><id>clojars</id><username>${{ secrets.CLOJARS_USER }}</username><password>${{ secrets.CLOJARS_PASSWORD }}</password></server></servers></settings>" > ~/.m2/settings.xml
+          echo "<settings><servers><server><id>clojars</id><username>${{ secrets.CLOJARS_USER }}</username><password>${{ secrets.CLOJARS_PASSWORD }}</password></server><server><id>github</id><username> ${{ secrets.GITHUB_ACTOR }}</username><password>${{ secrets.GITHUB_TOKEN }}</password></server></servers></settings>" > ~/.m2/settings.xml
       - name: Deploy
         run: mvn clean deploy -Dmaven.test.skip=true
+      - name: Deploy
+        run: mvn clean deploy -Dmaven.test.skip=true -Pfutjure-rolling-release -Dversion=1.0.0-futjure-testing-SNAPSHOT
       - run: rm -f ~/.m2/settings.xml
         if: ${{ always() }}
