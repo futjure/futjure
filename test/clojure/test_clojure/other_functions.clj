@@ -116,7 +116,20 @@
   ;; juxt for fns
   (let [a1 (fn [a] (+ 2 a))
         b1 (fn [b] (* 2 b))]
-    (is (= [5 6] ((juxt a1 b1) 3)))))
+    (is (= [5 6] ((juxt a1 b1) 3))))
+  ;; empty case
+  (let [v ((juxt))]
+    (is (vector? v))
+    (is (= [] v)))
+  ;; 0-20 functions x 0-20 args
+  (doseq [fs (map #(repeat % vector) (range 20))
+          args (map #(range %) (range 20))
+          :let [res (apply (apply juxt fs) args)]]
+    (is (vector? res)
+        [fs args])
+    (is (= (mapv #(apply % args) fs)
+           res)
+        [fs args])))
 
 ;partial
 
