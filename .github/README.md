@@ -11,13 +11,13 @@ have been or could be proposed in [Jira](https://clojure.atlassian.net/jira/soft
 Paste the following into a terminal to start a Futjure REPL (find the latest `io.github.futjure/futjure` version [here](https://clojars.org/io.github.futjure/futjure).
 
 ```bash
-clj -Sdeps '{:aliases {:futjure {:paths [] :classpath-overrides {org.clojure/clojure nil} :deps {org.clojure/clojure {:mvn/version "1.11.1" :exclusions [org.clojure/spec.alpha org.clojure/core.specs]} io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}}}' -A:futjure
+clj -Sdeps '{:aliases {:futjure {:classpath-overrides {org.clojure/clojure nil} :extra-deps {org.clojure/clojure {:mvn/version "1.11.1" :exclusions [org.clojure/spec.alpha org.clojure/core.specs]} io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}}}' -A:futjure
 ```
 
 eg.,
 
 ```bash
-$ clj -Sdeps '{:aliases {:futjure {:paths [] :classpath-overrides {org.clojure/clojure nil} :deps {org.clojure/clojure {:mvn/version "1.11.1" :exclusions [org.clojure/spec.alpha org.clojure/core.specs]} io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}}}' -A:futjure
+$ clj -Sdeps '{:aliases {:futjure {:classpath-overrides {org.clojure/clojure nil} :extra-deps {org.clojure/clojure {:mvn/version "1.11.1" :exclusions [org.clojure/spec.alpha org.clojure/core.specs]} io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}}}' -A:futjure
 Downloading: io/github/futjure/futjure/1.12.0-master-SNAPSHOT/maven-metadata.xml from clojars
 Downloading: io/github/futjure/futjure/1.12.0-master-SNAPSHOT/futjure-1.12.0-master-20221019.033342-3.pom from clojars
 Downloading: io/github/futjure/futjure/1.12.0-master-SNAPSHOT/futjure-1.12.0-master-20221019.033342-3.jar from clojars
@@ -39,8 +39,8 @@ Clojure CLI:
 ```clojure
 ;deps.edn
 {:aliases {:futjure {:classpath-overrides {org.clojure/clojure nil}
-                     :deps {org.clojure/clojure {:mvn/version "1.11.1" :exclusions [org.clojure/spec.alpha org.clojure/core.specs]}
-                            io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}}}
+                     :extra-deps {org.clojure/clojure {:mvn/version "1.11.1" :exclusions [org.clojure/spec.alpha org.clojure/core.specs]}
+                                  io.github.futjure/futjure {:mvn/version "1.12.0-master-SNAPSHOT"}}}}}
 ```
 
 ```bash
