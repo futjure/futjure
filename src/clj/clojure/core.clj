@@ -7131,6 +7131,7 @@ fails, attempts to require sym's namespace and retries."
 (let [_ (when-not (= "true" (System/getProperty "futjure.skip-clojure-conflict-check"))
           (assert (= 1 (-> (clojure.lang.RT/baseLoader)
                            (.getResources "clojure/version.properties")
+                           .asIterator
                            count))
                   "Both Clojure and Futjure are on the classpath!! Set `-Dfutjure.skip-clojure-conflict-check=true` to disable this check."))
       ^java.util.Properties
