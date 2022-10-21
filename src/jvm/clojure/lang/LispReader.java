@@ -237,7 +237,7 @@ static private Object installPlatformFeature(Object opts) {
         if (features == null)
             return mopts.assoc(LispReader.OPT_FEATURES, PLATFORM_FEATURES);
         else
-            return mopts.assoc(LispReader.OPT_FEATURES, RT.conj((IPersistentSet) RT.conj((IPersistentSet) features, PLATFORM_KEY)), FUTJURE_PLATFORM_KEY);
+            return mopts.assoc(LispReader.OPT_FEATURES, RT.conj((IPersistentSet) RT.conj((IPersistentSet) features, PLATFORM_KEY), FUTJURE_PLATFORM_KEY));
     }
 }
 
