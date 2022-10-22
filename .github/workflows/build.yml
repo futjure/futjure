@@ -74,6 +74,6 @@ jobs:
       - name: Deploy
         run: mvn clean deploy -Dmaven.test.skip=true
       - name: Deploy
-        run: mvn clean deploy -Dmaven.test.skip=true -Pfutjure-rolling-release -Dversion=1.0.0-futjuretesting-SNAPSHOT
+        run: mvn clean deploy -Dmaven.test.skip=true -Pfutjure-rolling-release -Drevision=1.0.0-futjuretesting-SNAPSHOT
       - run: rm -f ~/.m2/settings.xml
         if: ${{ always() }}
