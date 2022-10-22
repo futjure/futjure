@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.clojure</groupId>
-  <artifactId>clojure</artifactId>
+  <groupId>io.github.futjure</groupId>
+  <artifactId>futjure</artifactId>
   <name>clojure</name>
   <packaging>jar</packaging>
   <version>1.12.0-master-SNAPSHOT</version>
 
-  <url>http://clojure.org/</url>
+  <url>https://github.com/futjure/futjure</url>
   <description>Clojure core environment and runtime library.</description>
 
   <developers>
@@ -27,15 +27,16 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:clojure/clojure.git</connection>
-    <developerConnection>scm:git:git@github.com:clojure/clojure.git</developerConnection>
-    <url>git@github.com:clojure/clojure.git</url>
+    <connection>scm:git:git@github.com:futjure/futjure.git</connection>
+    <developerConnection>scm:git:git@github.com:futjure/futjure.git</developerConnection>
+    <url>git@github.com:futjure/futjure.git</url>
     <tag>HEAD</tag>
   </scm>
 
   <properties>
     <directlinking>true</directlinking>
   </properties>
+
 
   <dependencies>
     <dependency>
@@ -82,9 +83,9 @@
 
   <distributionManagement>
     <snapshotRepository>
-      <!-- This id is linked to the key setup on the CI server -->
-      <id>sonatype-nexus-staging</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>clojars</id>
+      <name>Clojars repository</name>
+      <url>https://clojars.org/repo</url>
     </snapshotRepository>
   </distributionManagement>
 
@@ -100,6 +101,11 @@
     </resources>
     <testSourceDirectory>test/java</testSourceDirectory>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.0.0</version>
+      </plugin>
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-compiler-plugin</artifactId>
@@ -223,20 +229,6 @@
 	</configuration>
       </plugin>
 
-      <!-- deploy artifacts to sonatype -->
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.8</version>
-        <extensions>true</extensions>
-        <configuration>
-          <!-- The server "id" element from settings to use authentication from -->
-          <serverId>sonatype-nexus-staging</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>true</autoReleaseAfterClose>
-        </configuration>
-      </plugin>
-
     </plugins>
   </build>
 
@@ -343,6 +335,17 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <!-- "mvn -Pfutjure-github-deploy" deploys 1.0.0-futjure-SNAPSHOT -->
+      <id>futjure-github-deploy</id>
+      <!--<version>1.0.0-futjure-SNAPSHOT</version>-->
+      <distributionManagement>
+        <snapshotRepository>
+          <id>github</id>
+          <url>https://maven.pkg.github.com/futjure/futjure</url>
+        </snapshotRepository>
+      </distributionManagement>
     </profile>
   </profiles>
 </project>

@@ -1,0 +1,84 @@
+name: Java CI
+
+on: [push]
+
+jobs:
+  test:
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        jdk: ['8', '11', '17', '19']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+          key: ${{ runner.os }}-deps-${{ matrix.submodule_hash }}-${{ hashFiles('**/pom.xml') }}-${{ hashFiles('**/deps.edn') }} 
+          restore-keys: |
+            ${{ runner.os }}-deps-${{ matrix.submodule_hash }}-${{ hashFiles('**/pom.xml') }}-${{ hashFiles('**/deps.edn') }}
+            ${{ runner.os }}-deps-${{ matrix.submodule_hash }}-${{ hashFiles('**/pom.xml') }}-
+            ${{ runner.os }}-deps-${{ matrix.submodule_hash }}-
+            ${{ runner.os }}-deps-
+      - name: Set up JDK ${{ matrix.jdk }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.jdk }}
+          distribution: 'temurin'
+          cache: maven
+      - run: mvn --version
+      - name: Build with Maven
+        run: mvn clean test
+  all-pr-checks:
+    needs: test
+    runs-on: ubuntu-20.04
+    steps:
+      - run: echo "All tests pass!"
+  deploy:
+    needs: all-pr-checks
+    env:
+      DEPLOY_JDK: 11
+    if: ${{ github.ref == 'refs/heads/futjure-release'
+            && github.repository == 'futjure/futjure'
+            && github.event_name == 'push'
+         }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+          key: ${{ runner.os }}-deps-${{ matrix.submodule_hash }}-${{ hashFiles('**/pom.xml') }}-${{ hashFiles('**/deps.edn') }} 
+          restore-keys: |
+            ${{ runner.os }}-deps-${{ matrix.submodule_hash }}-${{ hashFiles('**/pom.xml') }}-${{ hashFiles('**/deps.edn') }}
+            ${{ runner.os }}-deps-${{ matrix.submodule_hash }}-${{ hashFiles('**/pom.xml') }}-
+            ${{ runner.os }}-deps-${{ matrix.submodule_hash }}-
+            ${{ runner.os }}-deps-
+      - name: Set up JDK ${{ env.DEPLOY_JDK }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.DEPLOY_JDK }}
+      - name: Configure settings.xml
+        run: |
+          mkdir -p ~/.m2
+          echo "<settings><servers><server><id>clojars</id><username>${clojars_user}</username><password>${clojars_password}</password></server><server><id>github</id><username>${GITHUB_ACTOR}</username><password>${gh_token}</password></server></servers></settings>" > ~/.m2/settings.xml
+        env:
+          clojars_user: ${{ secrets.CLOJARS_USER }}
+          clojars_password: ${{ secrets.CLOJARS_PASSWORD }}
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy
+        run: mvn clean deploy -Dmaven.test.skip=true
+      - name: Deploy
+        run: |
+          branch=$(git branch --show-current)
+          mvn versions:set -DnewVersion=1.0.0-${branch//-/_}-SNAPSHOT
+          mvn clean deploy -Dmaven.test.skip=true -Pfutjure-github-deploy
+          git restore pom.xml
+      - run: rm -f ~/.m2/settings.xml
+        if: ${{ always() }}
