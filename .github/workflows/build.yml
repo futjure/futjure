@@ -73,12 +73,12 @@ jobs:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy
-        run: mvn clean deploy -Dmaven.test.skip=true
+        run: mvn clean deploy -Dmaven.test.skip=true --no-transfer-progress
       - name: Deploy
         run: |
           branch=$(git branch --show-current)
           mvn versions:set -DnewVersion=1.0.0-${branch//-/_}-SNAPSHOT
-          mvn clean deploy -Dmaven.test.skip=true -Pfutjure-github-deploy
+          mvn clean deploy -Dmaven.test.skip=true -Pfutjure-github-deploy --no-transfer-progress
           git restore pom.xml
       - run: rm -f ~/.m2/settings.xml
         if: ${{ always() }}
