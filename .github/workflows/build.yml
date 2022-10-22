@@ -76,8 +76,9 @@ jobs:
         run: mvn clean deploy -Dmaven.test.skip=true
       - name: Deploy
         run: |
-          mvn versions:set -DnewVersion=1.0.0-futjuretesting-SNAPSHOT
-          mvn clean deploy -Dmaven.test.skip=true -Pfutjure-rolling-release
+          branch=$(git branch --show-current)
+          mvn versions:set -DnewVersion=1.0.0-${branch//-/_}-SNAPSHOT
+          mvn clean deploy -Dmaven.test.skip=true -Pfutjure-github-deploy
           git restore pom.xml
       - run: rm -f ~/.m2/settings.xml
         if: ${{ always() }}

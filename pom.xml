@@ -337,8 +337,8 @@
       </build>
     </profile>
     <profile>
-      <!-- "mvn -Pfutjure-rolling-release" deploys 1.0.0-futjure-SNAPSHOT -->
-      <id>futjure-rolling-release</id>
+      <!-- "mvn -Pfutjure-github-deploy" deploys 1.0.0-futjure-SNAPSHOT -->
+      <id>futjure-github-deploy</id>
       <!--<version>1.0.0-futjure-SNAPSHOT</version>-->
       <distributionManagement>
         <snapshotRepository>
