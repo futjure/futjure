@@ -2036,27 +2036,35 @@
    :static true}
   [sym] (. clojure.lang.Var (find sym)))
 
+;if clear? is false (default), bindings will persist after returned
+;function finishes executing.
 (defn binding-conveyor-fn
   {:private true
    :added "1.3"}
-  [f]
-  (let [frame (clojure.lang.Var/cloneThreadBindingFrame)]
-    (fn 
-      ([]
-         (clojure.lang.Var/resetThreadBindingFrame frame)
-         (f))
-      ([x]
-         (clojure.lang.Var/resetThreadBindingFrame frame)
-         (f x))
-      ([x y]
-         (clojure.lang.Var/resetThreadBindingFrame frame)
-         (f x y))
-      ([x y z]
-         (clojure.lang.Var/resetThreadBindingFrame frame)
-         (f x y z))
-      ([x y z & args] 
-         (clojure.lang.Var/resetThreadBindingFrame frame)
-         (apply f x y z args)))))
+  ([f] (binding-conveyor-fn f false))
+  ([f clear?]
+   (let [frame (clojure.lang.Var/cloneThreadBindingFrame)]
+     (fn
+       ([]
+        (clojure.lang.Var/resetThreadBindingFrame frame)
+        (try (f)
+             (finally (when clear? (clojure.lang.Var/resetThreadBindingFrame)))))
+       ([x]
+        (clojure.lang.Var/resetThreadBindingFrame frame)
+        (try (f x)
+             (finally (when clear? (clojure.lang.Var/resetThreadBindingFrame)))))
+       ([x y]
+        (clojure.lang.Var/resetThreadBindingFrame frame)
+        (try (f x y)
+             (finally (when clear? (clojure.lang.Var/resetThreadBindingFrame)))))
+       ([x y z]
+        (clojure.lang.Var/resetThreadBindingFrame frame)
+        (try (f x y z)
+             (finally (when clear? (clojure.lang.Var/resetThreadBindingFrame)))))
+       ([x y z & args]
+        (clojure.lang.Var/resetThreadBindingFrame frame)
+        (try (apply f x y z args)
+             (finally (when clear? (clojure.lang.Var/resetThreadBindingFrame)))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Refs ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn ^{:private true}
@@ -2598,6 +2606,13 @@
   ((juxt a b c) x) => [(a x) (b x) (c x)]"
   {:added "1.1"
    :static true}
+  ([]
+     (fn
+       ([] [])
+       ([_] [])
+       ([_ _] [])
+       ([_ _ _] [])
+       ([_ _ _ & _] [])))
   ([f] 
      (fn
        ([] [(f)])
@@ -7045,7 +7060,7 @@ fails, attempts to require sym's namespace and retries."
   {:added "1.1"
    :static true}
   [f]
-  (let [f (binding-conveyor-fn f)
+  (let [f (binding-conveyor-fn f true)
         fut (.submit clojure.lang.Agent/soloExecutor ^Callable f)]
     (reify 
      clojure.lang.IDeref 

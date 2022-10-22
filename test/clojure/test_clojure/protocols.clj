@@ -15,17 +15,44 @@
             clojure.test-helper)
   (:import [clojure.test_clojure.protocols.examples ExampleInterface]))
 
-;; temporary hack until I decide how to cleanly reload protocol
-;; this no longer works
-(defn reload-example-protocols
-  []
-  (alter-var-root #'clojure.test-clojure.protocols.examples/ExampleProtocol
-                  assoc :impls {})
-  (alter-var-root #'clojure.test-clojure.protocols.more-examples/SimpleProtocol
-                  assoc :impls {})
-  (require :reload
-           'clojure.test-clojure.protocols.examples
-           'clojure.test-clojure.protocols.more-examples))
+(defn te* [top-levels body]
+  (let [g (gensym "clojure.test-clojure.protocols.gensym")
+        gother (gensym "clojure.test-clojure.protocols.more-examples.gensym")
+        gexamples (gensym "clojure.test-clojure.protocols.examples.gensym")]
+    ((binding [*ns* *ns*]
+       (eval `(do (ns ~gother)
+                  ~'(defprotocol SimpleProtocol
+                      "example protocol used by clojure tests. Note that
+                      foo collides with examples/ExampleProtocol."
+
+                      (foo [a] ""))
+                  (ns ~gexamples)
+                  ~'(defprotocol ExampleProtocol
+                      "example protocol used by clojure tests"
+
+                      (foo [a] "method with one arg")
+                      (bar [a b] "method with two args")
+                      (^String baz [a] [a b] "method with multiple arities")
+                      (with-quux [a] "method name with a hyphen"))
+                  (ns ~g
+                    (:require ~'[clojure.test :refer :all]
+                              [~gother :as ~'other]
+                              [~gexamples :as ~'examples]))
+                  ~@top-levels
+                  (fn [] (do ~@body))))))
+    (run! remove-ns [g gother gexamples])
+    nil))
+
+(defmacro te
+  "Eval top levels and thunked body in a fresh namespace, run
+  the thunk in the current context, and then remove the namespace.
+
+  Adds examples/ExampleProtocol and other/SimpleProtocol in scope
+  as fresh protocols in fresh namespaces.
+
+  Returns nil."
+  [top-levels & body]
+  `(te* '~top-levels '~body))
 
 (defn method-names
   "return sorted list of method names on a class"
@@ -107,7 +134,12 @@
           wgm (WillGetMarker.)]
       (is (satisfies? MarkerProtocol hm))
       (is (satisfies? MarkerProtocol2 hm))
-      (is (satisfies? MarkerProtocol wgm)))))
+      (is (satisfies? MarkerProtocol wgm))))
+  (testing "Markers cannot be satisfied via metadata"
+    (te [(defprotocol ViaMeta
+           :extend-via-metadata true)
+         (defrecord Foo [])]
+        (is (not (satisfies? ViaMeta (->Foo)))))))
 
 (deftype ExtendTestWidget [name])
 (deftype HasProtocolInline []
@@ -146,68 +178,82 @@
                          clojure.test_clojure.protocols.examples.ExampleProtocol
                          {:foo (fn [_] :extended)}))))))
 
-(deftype ExtendsTestWidget []
-  ExampleProtocol)
-#_(deftest extends?-test
-  (reload-example-protocols)
-  (testing "returns false if a type does not implement the protocol at all"
-    (is (false? (extends? other/SimpleProtocol ExtendsTestWidget))))
-  (testing "returns true if a type implements the protocol directly" ;; semantics changed 4/15/2010
-    (is (true? (extends? ExampleProtocol ExtendsTestWidget))))
-  (testing "returns true if a type explicitly extends protocol"
-    (extend
-     ExtendsTestWidget
-     other/SimpleProtocol
-     {:foo identity})
-    (is (true? (extends? other/SimpleProtocol ExtendsTestWidget)))))
+(deftest extends?-test
+  (te [(deftype ExtendsTestWidget []
+         examples/ExampleProtocol)]
+      (testing "returns false if a type does not implement the protocol at all"
+        (is (false? (extends? other/SimpleProtocol ExtendsTestWidget))))
+      (testing "returns true if a type implements the protocol directly" ;; semantics changed 4/15/2010
+        (is (true? (extends? examples/ExampleProtocol ExtendsTestWidget))))
+      (testing "returns true if a type explicitly extends protocol"
+        (extend
+          ExtendsTestWidget
+          other/SimpleProtocol
+          {:foo identity})
+        (is (true? (extends? other/SimpleProtocol ExtendsTestWidget))))))
 
-(deftype ExtendersTestWidget [])
-#_(deftest extenders-test
-  (reload-example-protocols)
-  (testing "a fresh protocol has no extenders"
-    (is (nil? (extenders ExampleProtocol))))
-  (testing "extending with no methods doesn't count!"
-    (deftype Something [])
-    (extend ::Something ExampleProtocol)
-    (is (nil? (extenders ExampleProtocol))))
-  (testing "extending a protocol (and including an impl) adds an entry to extenders"
-    (extend ExtendersTestWidget ExampleProtocol {:foo identity})
-    (is (= [ExtendersTestWidget] (extenders ExampleProtocol)))))
+(deftest extenders-test
+  (te [(deftype ExtendersTestWidget [])
+       (deftype Something [])]
+      (testing "a fresh protocol has no extenders"
+        (is (nil? (extenders examples/ExampleProtocol))))
+      (testing "extending with no methods doesn't count!"
+        (extend Something examples/ExampleProtocol)
+        (is (nil? (extenders examples/ExampleProtocol))))
+      (testing "extending a protocol (and including an impl) adds an entry to extenders"
+        (extend ExtendersTestWidget examples/ExampleProtocol {:foo identity})
+        (is (= [ExtendersTestWidget] (extenders examples/ExampleProtocol))))))
 
-(deftype SatisfiesTestWidget []
-  ExampleProtocol)
-#_(deftest satisifies?-test
-  (reload-example-protocols)
-  (let [whatzit (SatisfiesTestWidget.)]
-    (testing "returns false if a type does not implement the protocol at all"
-      (is (false? (satisfies? other/SimpleProtocol whatzit))))
-    (testing "returns true if a type implements the protocol directly"
-      (is (true? (satisfies? ExampleProtocol whatzit))))
-    (testing "returns true if a type explicitly extends protocol"
-      (extend
-       SatisfiesTestWidget
-       other/SimpleProtocol
-       {:foo identity})
-      (is (true? (satisfies? other/SimpleProtocol whatzit)))))  )
+(deftest satisifies?-test
+  (te [(defprotocol ViaMeta
+         :extend-via-metadata true
+         (via-meta1 [this])
+         (via-meta2 [this]))
+       (deftype SatisfiesTestWidget []
+         examples/ExampleProtocol)
+       (def this-nstr (-> *ns* ns-name name))]
+      (let [whatzit (SatisfiesTestWidget.)]
+        (testing "returns false if a type does not implement the protocol at all"
+          (is (false? (satisfies? other/SimpleProtocol whatzit))))
+        (testing "returns true if a type implements the protocol directly"
+          (is (true? (satisfies? examples/ExampleProtocol whatzit))))
+        (testing "returns true if a type explicitly extends protocol"
+          (extend
+            SatisfiesTestWidget
+            other/SimpleProtocol
+            {:foo identity})
+          (is (true? (satisfies? other/SimpleProtocol whatzit))))
+        (testing "satisfies via metadata only if at least one method implemented"
+          (let [v (reify)]
+            (is (not (satisfies? ViaMeta v)))
+            (is (satisfies? ViaMeta (with-meta v {(symbol this-nstr "via-meta1") (constantly true)})))
+            (is (satisfies? ViaMeta (with-meta v {(symbol this-nstr "via-meta2") (constantly true)})))
+            (is (satisfies? ViaMeta (with-meta v {(symbol this-nstr "via-meta1") (constantly true)
+                                                  (symbol this-nstr "via-meta2") (constantly true)})))
+            (is (not (satisfies? ViaMeta (with-meta v {(symbol this-nstr "via-meta3") (constantly true)})))))))))
 
-(deftype ReExtendingTestWidget [])
-#_(deftest re-extending-test
-  (reload-example-protocols)
-  (extend
-   ReExtendingTestWidget
-   ExampleProtocol
-   {:foo (fn [_] "first foo")
-    :baz (fn [_] "first baz")})
-  (testing "if you re-extend, the old implementation is replaced (not merged!)"
-    (extend
-     ReExtendingTestWidget
-     ExampleProtocol
-     {:baz (fn [_] "second baz")
-      :bar (fn [_ _] "second bar")})
-    (let [whatzit (ReExtendingTestWidget.)]
-      (is (thrown? IllegalArgumentException (foo whatzit)))
-      (is (= "second bar" (bar whatzit nil)))
-      (is (= "second baz" (baz whatzit))))))
+(deftest re-extending-test
+  (te [(deftype ReExtendingTestWidget [])]
+      (testing "first extension"
+        (extend
+          ReExtendingTestWidget
+          examples/ExampleProtocol
+          {:foo (fn [_] "first foo")
+           :baz (fn [_] "first baz")})
+        (let [whatzit (ReExtendingTestWidget.)]
+          (is (= "first foo" (examples/foo whatzit)))
+          (is (thrown? IllegalArgumentException (examples/bar whatzit nil)))
+          (is (= "first baz" (examples/baz whatzit)))))
+      (testing "if you re-extend, the old implementation is replaced (not merged!)"
+        (extend
+          ReExtendingTestWidget
+          examples/ExampleProtocol
+          {:baz (fn [_] "second baz")
+           :bar (fn [_ _] "second bar")})
+        (let [whatzit (ReExtendingTestWidget.)]
+          (is (thrown? IllegalArgumentException (examples/foo whatzit)))
+          (is (= "second bar" (examples/bar whatzit nil)))
+          (is (= "second baz" (examples/baz whatzit)))))))
 
 (defrecord DefrecordObjectMethodsWidgetA [a])
 (defrecord DefrecordObjectMethodsWidgetB [a])
