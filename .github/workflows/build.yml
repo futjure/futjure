@@ -28,6 +28,7 @@ jobs:
           java-version: ${{ matrix.jdk }}
           distribution: 'temurin'
           cache: maven
+      - run: mvn --version
       - name: Build with Maven
         run: mvn clean test
   all-pr-checks:
