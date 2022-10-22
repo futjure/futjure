@@ -11,3 +11,4 @@ maven-classpath.properties
 .nrepl-*
 *.patch
 *.diff
+*.versionsBackup
