@@ -65,7 +65,12 @@ jobs:
       - name: Configure settings.xml
         run: |
           mkdir -p ~/.m2
-          echo "<settings><servers><server><id>clojars</id><username>${{ secrets.CLOJARS_USER }}</username><password>${{ secrets.CLOJARS_PASSWORD }}</password></server><server><id>github</id><username>${{ secrets.GITHUB_ACTOR }}</username><password>${{ secrets.GITHUB_TOKEN }}</password></server></servers></settings>" > ~/.m2/settings.xml
+          echo "<settings><servers><server><id>clojars</id><username>${clojars_user}</username><password>${clojars_password}</password></server><server><id>github</id><username>${GITHUB_ACTOR}</username><password>${gh_token}</password></server></servers></settings>" > ~/.m2/settings.xml
+        env:
+          clojars_user: ${{ secrets.CLOJARS_USER }}
+          clojars_password: ${{ secrets.CLOJARS_PASSWORD }}
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Deploy
         run: mvn clean deploy -Dmaven.test.skip=true
       - name: Deploy
