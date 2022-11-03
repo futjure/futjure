@@ -11,7 +11,7 @@
   org.clojure/test.generative {:mvn/version "1.0.0"}}
  :aliases
  {:build {:extra-paths ["prep"]
-          :deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
+          :override-deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
           :ns-default build}
   :dbg {:classpath-overrides {org.clojure/clojure "target/classes"}
         :extra-deps {criterium/criterium {:mvn/version "0.4.4"}}}
