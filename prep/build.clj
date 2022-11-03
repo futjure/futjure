@@ -7,9 +7,10 @@
 (def class-dir "target/classes")
 
 (defn compile [_]
-  (println (sh/sh "mvn" "clean" "compile"))
-  (b/copy-dir {:src-dirs [class-dir]
-               :target-dir class-dir}))
+  (let [{:keys [exit ]} (sh/sh "mvn" "clean" "compile")
+        _ (assert (zero? exit))]
+    (b/copy-dir {:src-dirs [class-dir]
+                 :target-dir class-dir})))
 
 (defn install [_]
   (let [{sha :out :keys [exit]} (sh/sh "git" "rev-parse" "--verify" "HEAD")
