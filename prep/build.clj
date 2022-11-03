@@ -10,7 +10,8 @@
   (let [{:keys [exit ]} (sh/sh "mvn" "clean" "compile")
         _ (assert (zero? exit))]
     (b/copy-dir {:src-dirs [class-dir]
-                 :target-dir class-dir})))
+                 :target-dir class-dir})
+    (sh/sh "mkdir" "-p" "__prepped")))
 
 (defn install [_]
   (let [{sha :out :keys [exit]} (sh/sh "git" "rev-parse" "--verify" "HEAD")
