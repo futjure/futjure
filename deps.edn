@@ -6,7 +6,7 @@
  :deps
  {org.clojure/clojure {:local/root "."
                        :deps/manifest :pom} #_{:mvn/version "RELEASE"}
-  org.clojure/spec.alpha {:mvn/version "0.3.128"}
+  org.clojure/spec.alpha {:mvn/version "0.3.218"}
   org.clojure/core.specs.alpha {:mvn/version "0.2.62"}}
  :aliases
  {:test {:extra-deps {org.clojure/test.check {:mvn/version "1.1.1"}
