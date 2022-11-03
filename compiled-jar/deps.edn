@@ -1,0 +1,10 @@
+;; https://clojure.org/dev/developing_patches#_run_an_individual_test
+{:deps/prep-lib {:alias :build
+                 :fn package-compiled-jar
+                 :ensure "target/clojure.jar"}
+ :deps
+ {org.clojure/clojure {:local/root "../target/clojure.jar"}}
+ :aliases
+ {:build {:extra-paths ["prep"]
+          :deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
+          :ns-default build}}}
