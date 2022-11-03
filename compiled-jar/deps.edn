@@ -1,9 +1,9 @@
 ;; https://clojure.org/dev/developing_patches#_run_an_individual_test
 {:deps/prep-lib {:alias :build
                  :fn package-compiled-jar
-                 :ensure "target/clojure.jar"}
+                 :ensure "target/futjure-1.12.0-master-SNAPSHOT.jar"}
  :deps
- {org.clojure/clojure {:local/root "../target/clojure.jar"}}
+ {org.clojure/clojure {:local/root "../target/futjure-1.12.0-master-SNAPSHOT.jar"}}
  :aliases
  {:build {:extra-paths ["prep"]
           :deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
