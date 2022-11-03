@@ -2,7 +2,7 @@
 {:paths ["test"
          "target/test-classes"]
  :deps/prep-lib {:alias :build
-                 :fn install
+                 :fn compile
                  :ensure "target/classes"}
  :deps
  {org.clojure/clojure {:local/root "."
