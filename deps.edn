@@ -2,7 +2,8 @@
 {:paths ["test"
          "target/test-classes"]
  :deps/prep-lib {:alias :build
-                 :fn compile}
+                 :fn compile
+                 :ensure "target/classes"}
  :deps
  {org.clojure/clojure {:local/root "."
                        :deps/manifest :pom} #_{:mvn/version "RELEASE"}
