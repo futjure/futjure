@@ -7,7 +7,7 @@
 (def class-dir "target/classes")
 
 (defn compile [_]
-  (let [{:keys [exit ]} (sh/sh "mvn" "clean" "compile")
+  (let [{:keys [exit]} (sh/sh "mvn" "clean" "compile")
         _ (assert (zero? exit))]
     (b/copy-dir {:src-dirs [class-dir]
                  :target-dir class-dir})

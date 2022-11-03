@@ -1,5 +1,6 @@
 ;; https://clojure.org/dev/developing_patches#_run_an_individual_test
 {:paths ["test"
+         "target/classes"
          "target/test-classes"]
  :deps/prep-lib {:alias :build
                  :fn compile
