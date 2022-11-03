@@ -3,9 +3,9 @@
             [clojure.tools.build.util.file :as file]
             [clojure.java.shell :as sh]))
 
-(def ^java.io.File jar-dir "target/local-jars")
-(def jar-file "target/clojure.jar")
+(def class-dir "target/classes")
 
-(defn jar [_]
-  (sh/sh "mvn package -Dmaven.skip.test=true")
-  (println (:out (sh/sh (format "set +x; cp '%s' '%s'" jar-file (api/resolve-path jar-dir))))))
+(defn compile [_]
+  (sh/sh "mvn clean compile")
+  (b/copy-dir {:src-dirs [class-dir]
+               :target-dir class-dir}))
