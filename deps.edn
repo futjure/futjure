@@ -1,7 +1,5 @@
 ;; https://clojure.org/dev/developing_patches#_run_an_individual_test
-{:paths ["test"
-         "target/classes"
-         "target/test-classes"]
+{:paths ["target/classes"]
  :deps/prep-lib {:alias :build
                  :fn compile
                  :ensure "__prepped"}
@@ -11,7 +9,9 @@
   org.clojure/test.check {:mvn/version "1.1.1"}
   org.clojure/test.generative {:mvn/version "1.0.0"}}
  :aliases
- {:build {:extra-paths ["prep"]
+ {:test {:extra-paths ["test"
+                       "target/test-classes"]}
+  :build {:extra-paths ["prep"]
           :deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
           :ns-default build}
   :dbg {:classpath-overrides {org.clojure/clojure "target/classes"}
