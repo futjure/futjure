@@ -1,5 +1,5 @@
 (ns build
-  (:require [clojure.tools.build.api :as api]
+  (:require [clojure.tools.build.api :as b]
             [clojure.tools.build.util.file :as file]
             [clojure.java.shell :as sh]))
 
