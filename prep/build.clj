@@ -12,6 +12,12 @@
     (b/copy-dir {:src-dirs [class-dir]
                  :target-dir class-dir})))
 
+(defn compile-slim [_]
+  (let [{:keys [exit]} (sh/sh "ant" "compile-java")
+        _ (assert (zero? exit))]
+    (b/copy-dir {:src-dirs [class-dir]
+                 :target-dir class-dir})))
+
 (defn install [_]
   (let [{sha :out :keys [exit]} (sh/sh "git" "rev-parse" "--verify" "HEAD")
         _ (assert (zero? exit) exit)
