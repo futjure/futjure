@@ -2,7 +2,7 @@
 {:paths ["extracted-jar"]
  :deps/prep-lib {:alias :build
                  :fn package-compiled-jar
-                 :ensure "extracted-jar/clojure"}
+                 :ensure "prep-done"}
  :deps {org.clojure/spec.alpha {:mvn/version "0.3.218"}
         org.clojure/core.specs.alpha {:mvn/version "0.2.62"}}
  :aliases

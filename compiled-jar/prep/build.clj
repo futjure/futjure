@@ -7,9 +7,10 @@
     (assert (zero? exit))))
 
 (defn package-compiled-jar [_]
-  (sh! "mvn" "package" "-Dmaven.test.skip=true"
+  (sh! "mvn" "clean" "package" "-Dmaven.test.skip=true"
        :dir "..")
   (sh! "cp" "../target/futjure-1.12.0-master-SNAPSHOT.jar" "extracted-jar")
   (sh! "jar" "xf" "futjure-1.12.0-master-SNAPSHOT.jar"
        :dir "extracted-jar")
-  (sh! "rm" "extracted-jar/futjure-1.12.0-master-SNAPSHOT.jar"))
+  (sh! "rm" "extracted-jar/futjure-1.12.0-master-SNAPSHOT.jar")
+  (sh! "touch" "prep-done"))
