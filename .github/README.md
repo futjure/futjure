@@ -95,6 +95,16 @@ Support zero-arguments in `clojure.core/juxt`.
 
 - [Patch](https://github.com/futjure/futjure/compare/futjure-master...CLJ-2322-juxt-zero-arity)
 
+## Git dependency support for Clojure
+
+Futjure provides various branches for installing Clojure from source using Clojure CLI's git dependency feature.
+
+This is useful if you are creating your own Clojure version and you don't want to upload a jar anywhere.
+Simply cherry-pick the head of the branch corresponding to the Clojure version you'd like to alter
+to add git dependency support to your fork.
+
+See [no-patch-release-notes.md](../no-patch-release-notes.md) for instructions.
+
 ## License
 
-Same as Clojure---see [readme.txt](readme.txt).
+Same as Clojure---see [readme.txt](../readme.txt).
