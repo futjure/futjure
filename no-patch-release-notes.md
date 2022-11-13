@@ -4,7 +4,7 @@ Futjure includes minor variants of offical Clojure releases
 that just add the ability to use Clojure CLI's
 Git dependency support (instead of downloading `clojure.jar` from Maven Central).
 
-For each supported Clojure tag (eg., [`clojure-1.11.1`](https://github.com/clojure/clojure/tree/clojure-1.11.1)),
+For each supported Clojure tag (eg., [`clojure-1.11.1`](https://github.com/clojure/clojure/tree/clojure-1.11.1)) a
 corresponding branch is made in [futjure](https://github.com/futjure/futjure)
 (eg., [`futjure__clojure-tag__clojure-1.11.1__no-patch`](https://github.com/futjure/futjure/tree/futjure__clojure-tag__clojure-1.11.1__no-patch)).
 New commits will be pushed to these branches periodically in support of git-related features.
@@ -12,9 +12,13 @@ Note that these commits will preserve history, to ensure that git dependencies o
 commits will continue to work (since older commits will not be deleted via git garbage collection).
 
 Each version below corresponds to a batch of commits that adds Git support for
-various Clojure versions. Releases are incrementally increasing integer.
+various Clojure versions. Releases are an incrementally increasing integer.
 
-## clojure-1.11.1 (version 0)
+## Latest releases
+- [clojure-1.11.1](#clojure-1111-version-0)
+- [clojure-1.11.0](#clojure-1110-version-0)
+- [clojure-1.10.3](#clojure-1103-version-0)
+## clojure-1.11.1 Version 0
 
 > Created: Sun Nov 13 00:38:30 EST 2022
 
@@ -42,7 +46,7 @@ deps.edn dependency info:
 - [Compare this release to original commit](https://github.com/futjure/futjure/compare/ce55092f2b2f5481d25cff6205470c1335760ef6...0ac116f5abf0be4aa7a1fd84cd275336f77146e7)
 - [Futjure branch: futjure__clojure-tag__clojure-1.11.1__no-patch](https://github.com/futjure/futjure/tree/futjure__clojure-tag__clojure-1.11.1__no-patch)
 - Futjure long version id: futjure__clojure-tag__clojure-1.11.1__no-patch::v0
-## clojure-1.11.0 (version 0)
+## clojure-1.11.0 Version 0
 
 > Created: Sun Nov 13 00:38:30 EST 2022
 
@@ -70,7 +74,7 @@ deps.edn dependency info:
 - [Compare this release to original commit](https://github.com/futjure/futjure/compare/f376cf62bb0c30f72b0df4ee94c38fa503fa4be7...36286cfb3ae66903a83b4818423171b7d595638d)
 - [Futjure branch: futjure__clojure-tag__clojure-1.11.0__no-patch](https://github.com/futjure/futjure/tree/futjure__clojure-tag__clojure-1.11.0__no-patch)
 - Futjure long version id: futjure__clojure-tag__clojure-1.11.0__no-patch::v0
-## clojure-1.10.3 (version 0)
+## clojure-1.10.3 Version 0
 
 > Created: Sun Nov 13 00:38:30 EST 2022
 
