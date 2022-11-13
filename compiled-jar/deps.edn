@@ -1,0 +1,10 @@
+;; https://clojure.org/dev/developing_patches#_run_an_individual_test
+{:paths ["extracted-jar"]
+ :deps/prep-lib {:alias :build
+                 :fn package-compiled-jar
+                 :ensure "prep-done"}
+ :deps {org.clojure/spec.alpha {:mvn/version "0.3.218"}
+        org.clojure/core.specs.alpha {:mvn/version "0.2.62"}}
+ :aliases
+ {:build {:extra-paths ["prep"]
+          :ns-default build}}}
